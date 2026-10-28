@@ -41,6 +41,8 @@ if (!$project) {
     exit;
 }
 
+$demoUrl = project_demo_url($project['demo_url'], $project['title']);
+
 // Check authorization: Non-approved projects can only be viewed by the project author or admin
 if ($project['status'] !== 'approved') {
     $canView = false;
@@ -74,14 +76,14 @@ require_once __DIR__ . '/../backend/core/header.php';
 <div class="container-xl py-4">
     <!-- Breadcrumb & Back -->
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb small mb-0">
-                <li class="breadcrumb-item"><a href="<?= base_url() ?>">Home</a></li>
-                <li class="breadcrumb-item"><a href="<?= base_url('frontend/browse.php') ?>">Projects</a></li>
-                <li class="breadcrumb-item"><a href="<?= base_url('frontend/browse.php?category=' . $project['category_id']) ?>"><?= htmlspecialchars($project['category_name']) ?></a></li>
-                <li class="breadcrumb-item active" aria-current="page"><?= htmlspecialchars($project['title']) ?></li>
-            </ol>
-        </nav>
+        <!-- Back to Explore Projects -->
+        <div>
+            <a href="<?= is_student() ? base_url('frontend/student/dashboard.php?tab=explore') : base_url('frontend/browse.php') ?>" 
+               class="btn-back-explore">
+                <i class="bi bi-arrow-left btn-back-icon"></i>
+                <span>Back to Explore Projects</span>
+            </a>
+        </div>
 
         <?php if (is_admin()): ?>
             <div class="mt-2 mt-md-0">
@@ -292,9 +294,9 @@ require_once __DIR__ . '/../backend/core/header.php';
             <div class="content-card">
                 <h6 class="fw-bold mb-3"><i class="bi bi-link-45deg me-2 text-primary"></i>Project Resources</h6>
                 <div class="d-grid gap-2">
-                    <?php if (!empty($project['demo_url'])): ?>
-                        <a href="<?= htmlspecialchars($project['demo_url']) ?>" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm text-start py-2">
-                            <i class="bi bi-play-circle-fill me-2 text-danger"></i>Watch Demo Video / Live URL
+                    <?php if ($demoUrl !== null): ?>
+                        <a href="<?= htmlspecialchars($demoUrl) ?>" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm text-start py-2">
+                            <i class="bi bi-play-circle-fill me-2 text-danger"></i><?= htmlspecialchars(project_demo_link_label($demoUrl)) ?>
                         </a>
                     <?php else: ?>
                         <span class="btn btn-light btn-sm text-muted text-start py-2 disabled">

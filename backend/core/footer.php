@@ -1,5 +1,6 @@
 </main>
 
+<?php if (empty($_GET['bg_blur'])): ?>
 <aside class="cookie-notice" id="cookieNotice" aria-label="Cookie information" hidden>
     <div>
         <strong>Essential cookies</strong>
@@ -7,6 +8,7 @@
     </div>
     <button class="btn btn-primary btn-sm" type="button" id="dismissCookieNotice">Got it</button>
 </aside>
+<?php endif; ?>
 
 <?php if ($isHomePage): ?>
 <!-- Full Footer (Home Page) -->

@@ -152,10 +152,11 @@ require_once __DIR__ . '/../backend/core/header.php';
 ?>
 
 <div class="auth-page-wrapper glass-auth-wrapper">
-    <!-- Ambient Floating Orbs for Glass Refraction -->
-    <div class="glass-bg-orb glass-orb-1" aria-hidden="true"></div>
-    <div class="glass-bg-orb glass-orb-2" aria-hidden="true"></div>
-    <div class="glass-bg-orb glass-orb-3" aria-hidden="true"></div>
+    <!-- Blurred Home Page Background -->
+    <div class="auth-home-bg-layer" aria-hidden="true">
+        <iframe src="<?= base_url('frontend/index.php?bg_blur=1') ?>" class="auth-home-bg-frame" tabindex="-1" title="Background Home Page"></iframe>
+        <div class="auth-home-bg-overlay"></div>
+    </div>
 
     <div class="container d-flex flex-column align-items-center">
         <div class="auth-container-glass">

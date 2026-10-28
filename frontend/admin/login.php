@@ -74,10 +74,11 @@ $pageDescription = 'Sign in to the ProjectSphere Faculty & Evaluator Portal to r
 <body class="bg-light">
 
 <div class="auth-page-wrapper glass-auth-wrapper">
-    <!-- Ambient Floating Orbs for Glass Refraction -->
-    <div class="glass-bg-orb glass-orb-1" aria-hidden="true"></div>
-    <div class="glass-bg-orb glass-orb-2" aria-hidden="true"></div>
-    <div class="glass-bg-orb glass-orb-3" aria-hidden="true"></div>
+    <!-- Blurred Home Page Background -->
+    <div class="auth-home-bg-layer" aria-hidden="true">
+        <iframe src="<?= base_url('frontend/index.php?bg_blur=1') ?>" class="auth-home-bg-frame" tabindex="-1" title="Background Home Page"></iframe>
+        <div class="auth-home-bg-overlay"></div>
+    </div>
 
     <div class="container d-flex flex-column align-items-center">
         <div class="auth-container-glass">
@@ -118,7 +119,10 @@ $pageDescription = 'Sign in to the ProjectSphere Faculty & Evaluator Portal to r
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label fw-semibold text-secondary small" for="adminPassword">Faculty Password</label>
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <label class="form-label fw-semibold text-secondary small mb-0" for="adminPassword">Faculty Password</label>
+                            <a href="<?= base_url('frontend/forgot-password.php') ?>" class="small text-decoration-none">Forgot password?</a>
+                        </div>
                         <div class="input-group auth-input-group glass-input-group">
                             <span class="input-group-text"><i class="bi bi-lock"></i></span>
                             <input type="password" name="password" id="adminPassword" class="form-control" placeholder="••••••••" required>

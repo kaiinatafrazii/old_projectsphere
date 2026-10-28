@@ -71,6 +71,8 @@ if (!$project) {
     exit;
 }
 
+$demoUrl = project_demo_url($project['demo_url'], $project['title']);
+
 // Team members
 $team = $pdo->prepare("SELECT * FROM project_team_members WHERE project_id = :pid");
 $team->execute([':pid' => $projectId]);
@@ -240,9 +242,9 @@ require_once __DIR__ . '/../../backend/core/header.php';
                                 <span class="text-muted small">No documentation file attached.</span>
                             <?php endif; ?>
 
-                            <?php if (!empty($project['demo_url'])): ?>
-                                <a href="<?= htmlspecialchars($project['demo_url']) ?>" target="_blank" class="btn btn-outline-primary btn-sm text-start py-2">
-                                    <i class="bi bi-play-circle-fill me-2"></i>Open Demo Video / URL
+                            <?php if ($demoUrl !== null): ?>
+                                <a href="<?= htmlspecialchars($demoUrl) ?>" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm text-start py-2">
+                                    <i class="bi bi-play-circle-fill me-2"></i><?= htmlspecialchars(project_demo_link_label($demoUrl, 'Open Demo Video / URL')) ?>
                                 </a>
                             <?php endif; ?>
                         </div>

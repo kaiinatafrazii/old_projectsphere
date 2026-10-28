@@ -111,8 +111,9 @@ require_once __DIR__ . '/../../backend/core/header.php';
 
                                             <div class="text-muted small">
                                                 <i class="bi bi-calendar3 me-1"></i> Submitted: <?= date('d M Y, h:i A', strtotime($p['submitted_at'])) ?>
-                                                <?php if (!empty($p['demo_url'])): ?>
-                                                    &bull; <a href="<?= htmlspecialchars($p['demo_url']) ?>" target="_blank" class="text-decoration-none"><i class="bi bi-play-circle me-1"></i>Demo</a>
+                                                <?php $demoUrl = project_demo_url($p['demo_url'], $p['title']); ?>
+                                                <?php if ($demoUrl !== null): ?>
+                                                    &bull; <a href="<?= htmlspecialchars($demoUrl) ?>" target="_blank" rel="noopener noreferrer" class="text-decoration-none"><i class="bi bi-play-circle me-1"></i><?= htmlspecialchars(project_demo_link_label($demoUrl, 'Demo')) ?></a>
                                                 <?php endif; ?>
                                             </div>
 

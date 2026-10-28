@@ -124,6 +124,15 @@ require_once __DIR__ . '/../backend/core/auth.php';
 
 $suite->assert(function_exists('base_url'), "Function base_url() exists");
 $suite->assert(str_contains(base_url('test.php'), 'test.php'), "base_url() produces valid path");
+$legacyDemoUrl = project_demo_url('https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'Smart Library Management System');
+$suite->assert(
+    $legacyDemoUrl === 'https://www.youtube.com/results?search_query=Smart%20Library%20Management%20System%20project%20demo',
+    "Legacy sample video redirects to project-related YouTube search"
+);
+$suite->assert(
+    project_demo_link_label($legacyDemoUrl) === 'Find Related Videos on YouTube',
+    "YouTube search links use an accurate resource label"
+);
 
 $suite->assert(function_exists('generate_csrf'), "Function generate_csrf() exists");
 $csrfTok = generate_csrf();

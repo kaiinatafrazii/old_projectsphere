@@ -129,6 +129,16 @@ Open your web browser and navigate to:
 http://localhost/projectsphere/
 ```
 
+### Step 5: Configure Password Reset Emails (Gmail)
+Password reset uses PHP's `mail()` function and XAMPP Sendmail. To enable it:
+1. In `C:\xampp\sendmail\sendmail.ini`, set `smtp_server=smtp.gmail.com`, `smtp_port=587`, and `smtp_ssl=auto`.
+2. Set `auth_username` to your Gmail address and `auth_password` to a Google App Password (enable Google 2-Step Verification first; enter the App Password without spaces). Do not use your regular Gmail password or commit the App Password.
+3. In `C:\xampp\php\php.ini`, set `sendmail_path = "\"C:\xampp\sendmail\sendmail.exe\" -t"` and `sendmail_from` to the same Gmail address.
+4. Restart Apache from the XAMPP Control Panel.
+5. Use **Forgot password?** on the login screen. The six-digit code expires after 10 minutes and is limited to five verification attempts.
+
+The reset page creates its reset-code table automatically on an existing database. The schema also includes the table for fresh database installs.
+
 ---
 
 ## 7. Database Architecture & Schema

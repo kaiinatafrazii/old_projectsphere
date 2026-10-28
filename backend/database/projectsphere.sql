@@ -9,6 +9,8 @@ USE `projectsphere`;
 
 SET FOREIGN_KEY_CHECKS = 0;
 
+DROP TABLE IF EXISTS `password_resets`;
+
 -- 1. USERS TABLE (Handles authentication credentials and roles)
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
@@ -20,6 +22,15 @@ CREATE TABLE `users` (
   `status` ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE `password_resets` (
+  `user_id` INT NOT NULL PRIMARY KEY,
+  `code_hash` VARCHAR(255) NOT NULL,
+  `expires_at` DATETIME NOT NULL,
+  `attempts` TINYINT UNSIGNED NOT NULL DEFAULT 0,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT `fk_password_resets_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 2. STUDENTS TABLE (Extends user with academic profile)
@@ -211,8 +222,8 @@ INSERT INTO `projects` (
   '1. Automate book issue and return processing.\n2. Provide real-time catalog search by ISBN, author, and genre.\n3. Automatically calculate overdue fines based on college rules.\n4. Deliver an intuitive dashboard for librarians and students.',
   '• Real-time ISBN search & availability indicator\n• Student issue history and overdue reminder generation\n• Fine estimation calculator\n• Exportable circulation reports (CSV/PDF)\n• Mobile-friendly responsive catalog view',
   'PHP 8.2, MySQL, HTML5, CSS3, Bootstrap 5, JavaScript, Chart.js',
-  'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-  'assets/images/sample-library.svg',
+  'https://www.youtube.com/results?search_query=Smart+Library+Management+System+project+demo',
+  'assets/images/project-library.jpg',
   'uploads/documents/smart-library-docs.pdf',
   'uploads/private-code/smart-library-src.zip',
   'https://github.com/rahul-college/private-library-code',
@@ -228,8 +239,8 @@ INSERT INTO `projects` (
   '1. Generate single-use rotating QR codes valid for 15 seconds.\n2. Allow students to authenticate and scan QR securely.\n3. Prevent proxy attendance through geolocation boundaries.\n4. Generate instant percentage calculations and low-attendance alerts.',
   '• Dynamic QR code generator on lecturer screen\n• Geofenced mobile scanner validation\n• Monthly and semester percentage calculator\n• Automated absentee notifications via SMS/Email\n• Export to Excel for departmental records',
   'Android SDK, Java, PHP Backend, MySQL REST API, Bootstrap 5',
-  'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-  'assets/images/sample-qr.svg',
+  'https://www.youtube.com/results?search_query=QR+Code+Attendance+System+project+demo',
+  'assets/images/project-qr.jpg',
   'uploads/documents/qr-attendance-docs.pdf',
   'uploads/private-code/qr-attendance-src.zip',
   'https://github.com/priya-college/private-qr-attendance',
@@ -245,8 +256,8 @@ INSERT INTO `projects` (
   '1. Provide role-based portal for TPO cell, company HRs, and students.\n2. Enable automatic eligibility filtering based on 10th, 12th, and Diploma aggregate.\n3. Send one-click interview round schedules and hall-ticket downloads.\n4. Present comprehensive placement statistical insights to management.',
   '• Eligibility engine matching company criteria with student marks\n• Resume builder & verified credential repository\n• Round-wise shortlist broadcasting\n• Placement analytics chart for annual college accreditation',
   'PHP, MySQL, Bootstrap 5, Vanilla CSS, JavaScript, AJAX',
-  'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-  'assets/images/sample-placement.svg',
+  'https://www.youtube.com/results?search_query=Campus+Placement+Internship+Portal+project+demo',
+  'assets/images/project-placement.jpg',
   'uploads/documents/placement-portal-docs.pdf',
   'uploads/private-code/placement-portal-src.zip',
   'https://github.com/amit-college/private-placement-code',
@@ -262,8 +273,8 @@ INSERT INTO `projects` (
   '1. Gather real-time soil moisture and environmental metrics via IoT sensors.\n2. Transmit sensor packets to central PHP/MySQL server over Wi-Fi.\n3. Automatically activate water solenoid valves when soil drops below threshold.\n4. Offer an accessible web dashboard for monitoring crop health.',
   '• ESP32 microcontroller with DHT22 and capacitive soil sensors\n• Automated relay switch triggering irrigation pump\n• Live data gauges showing moisture %, temperature, and humidity\n• Daily water consumption analytics and threshold configuration',
   'ESP32, C++, PHP, MySQL, CSS Grid, Chart.js, Bootstrap 5',
-  'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-  'assets/images/sample-iot.svg',
+  'https://www.youtube.com/results?search_query=IoT+Smart+Agriculture+Monitoring+System+project+demo',
+  'assets/images/project-iot.jpg',
   'uploads/documents/smart-agriculture-docs.pdf',
   'uploads/private-code/smart-agriculture-src.zip',
   'https://github.com/neha-college/private-iot-code',
@@ -279,8 +290,8 @@ INSERT INTO `projects` (
   '1. Capture and inspect local IPv4 network packets safely.\n2. Detect unencrypted traffic (HTTP, FTP, Telnet) with safety alerts.\n3. Visualize protocol distribution in clean graphical charts.\n4. Generate a simplified security audit score for lab computers.',
   '• Real-time packet parsing (Ethernet, IP, TCP, UDP)\n• Suspicious unencrypted credential flagger\n• Exportable PCAP capture summary\n• College lab security compliance checklist',
   'Python Socket Engine, PHP Dashboard, SQLite/MySQL, Bootstrap 5',
-  'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-  'assets/images/sample-network.svg',
+  'https://www.youtube.com/results?search_query=Network+Packet+Sniffer+Vulnerability+Analyzer+project+demo',
+  'assets/images/project-network.jpg',
   'uploads/documents/network-sniffer-docs.pdf',
   'uploads/private-code/network-sniffer-src.zip',
   'https://github.com/vikram-college/private-network-code',

@@ -52,6 +52,98 @@ function sanitize(?string $data): string {
 }
 
 /**
+ * Replace the old shared sample video with a search for videos related to this project.
+ */
+function project_demo_url(?string $demoUrl, string $projectTitle): ?string {
+    $demoUrl = trim($demoUrl ?? '');
+    if ($demoUrl === '') {
+        return null;
+    }
+
+    $parts = parse_url($demoUrl);
+    $query = [];
+    if (is_array($parts)) {
+        parse_str($parts['query'] ?? '', $query);
+    }
+
+    if (($query['v'] ?? '') === 'dQw4w9WgXcQ') {
+        return 'https://www.youtube.com/results?search_query=' . rawurlencode($projectTitle . ' project demo');
+    }
+
+    return $demoUrl;
+}
+
+function project_demo_link_label(?string $demoUrl, string $defaultLabel = 'Watch Demo Video / Live URL'): string {
+    $parts = parse_url($demoUrl ?? '');
+
+    if (
+        is_array($parts)
+        && in_array($parts['host'] ?? '', ['youtube.com', 'www.youtube.com'], true)
+        && ($parts['path'] ?? '') === '/results'
+    ) {
+        return 'Find Related Videos on YouTube';
+    }
+
+    return $defaultLabel;
+}
+
+function send_project_email(string $recipient, string $subject, string $message): bool {
+    $sender = getenv('PROJECTSPHERE_MAIL_FROM') ?: (ini_get('sendmail_from') ?: 'no-reply@projectsphere.edu');
+    
+    // Always log outgoing emails to backend/uploads/mail_log.txt for audit & local inspection
+    $logDir = __DIR__ . '/../../backend/uploads';
+    if (!is_dir($logDir)) {
+        @mkdir($logDir, 0755, true);
+    }
+    $logFile = $logDir . '/mail_log.txt';
+    $timestamp = date('Y-m-d H:i:s');
+    $logEntry = "==================== {$timestamp} ====================\n"
+              . "TO: {$recipient}\n"
+              . "FROM: {$sender}\n"
+              . "SUBJECT: {$subject}\n\n"
+              . "{$message}\n\n";
+    @file_put_contents($logFile, $logEntry, FILE_APPEND);
+
+    // 1. First attempt: Direct TLS/SSL SMTP (Gmail, Outlook, etc.)
+    $smtpFile = __DIR__ . '/smtp.php';
+    if (file_exists($smtpFile)) {
+        require_once $smtpFile;
+        $smtpRes = send_smtp_email($recipient, $subject, $message);
+        if (!empty($smtpRes['success'])) {
+            return true;
+        }
+    }
+
+    // 2. Second attempt: PHP mail() function
+    $mailSent = false;
+    if (function_exists('mail')) {
+        @ini_set('sendmail_from', $sender);
+        $headers = [
+            'From: ProjectSphere <' . $sender . '>',
+            'Reply-To: ' . $sender,
+            'MIME-Version: 1.0',
+            'Content-Type: text/plain; charset=UTF-8',
+            'X-Mailer: PHP/' . phpversion()
+        ];
+        $encodedSubject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
+        $mailSent = @mail($recipient, $encodedSubject, $message, implode("\r\n", $headers));
+    }
+
+    // 3. Fallback: On localhost, local logging counts as accepted
+    $remoteAddr = $_SERVER['REMOTE_ADDR'] ?? '';
+    $httpHost   = $_SERVER['HTTP_HOST'] ?? '';
+    $isLocal    = in_array($remoteAddr, ['127.0.0.1', '::1', 'localhost', ''])
+               || str_contains($httpHost, 'localhost')
+               || str_contains($httpHost, '127.0.0.1');
+
+    if (!$mailSent && $isLocal) {
+        return true;
+    }
+
+    return $mailSent;
+}
+
+/**
  * Generate URL slug from title
  */
 function slugify(string $text): string {

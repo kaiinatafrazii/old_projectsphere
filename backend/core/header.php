@@ -131,7 +131,7 @@ $socialPreview = $requestScheme . $requestHost . base_url('frontend/assets/image
         }
     </style>
 </head>
-<body>
+<body class="<?= !empty($_GET['bg_blur']) ? 'is-bg-blur' : '' ?>">
 
 <!-- Main Navigation Bar -->
 <?php if (empty($hideMainNavigation)): ?>
@@ -146,6 +146,7 @@ $socialPreview = $requestScheme . $requestHost . base_url('frontend/assets/image
         </button>
 
         <div class="collapse navbar-collapse" id="navbarMain">
+            <?php if (!is_logged_in()): ?>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 d-flex flex-row flex-nowrap align-items-center gap-2">
                 <?php if ($isHomePage): ?>
                 <li class="nav-item">
@@ -158,6 +159,7 @@ $socialPreview = $requestScheme . $requestHost . base_url('frontend/assets/image
                 <li class="nav-item"><a class="nav-link" href="#how-it-works">How it works</a></li>
                 <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
                 <?php else: ?>
+                <!-- Guest / Visitor Navigation -->
                 <li class="nav-item">
                     <a class="nav-link <?= ($currentPage === '' || $currentPage === 'index.php') ? 'active' : '' ?>" href="<?= base_url('frontend/') ?>">
                         <i class="bi bi-house-door"></i>
@@ -200,6 +202,9 @@ $socialPreview = $requestScheme . $requestHost . base_url('frontend/assets/image
                 </li>
                 <?php endif; ?>
             </ul>
+            <?php else: ?>
+            <div class="me-auto"></div>
+            <?php endif; ?>
 
             <!-- Authentication User Actions -->
             <div class="d-flex align-items-center gap-2 flex-shrink-0">

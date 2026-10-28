@@ -39,6 +39,8 @@ if ($method === 'GET') {
             json_response(['success' => false, 'message' => 'Project not found.'], 404);
         }
 
+        $project['demo_url'] = project_demo_url($project['demo_url'], $project['title']);
+
         // Authorization check for non-approved
         if ($project['status'] !== 'approved') {
             $canView = ($currentUser && ($currentUser['role'] === 'admin' || ($currentUser['role'] === 'student' && $currentUser['profile_id'] == $project['student_id'])));
@@ -92,6 +94,10 @@ if ($method === 'GET') {
         ");
         $sStmt->execute([':sid' => $studentUser['profile_id']]);
         $myProjects = $sStmt->fetchAll();
+        foreach ($myProjects as &$project) {
+            $project['demo_url'] = project_demo_url($project['demo_url'], $project['title']);
+        }
+        unset($project);
         json_response(['success' => true, 'projects' => $myProjects]);
     }
 
@@ -131,7 +137,12 @@ if ($method === 'GET') {
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute($params);
-        json_response(['success' => true, 'projects' => $stmt->fetchAll()]);
+        $projects = $stmt->fetchAll();
+        foreach ($projects as &$project) {
+            $project['demo_url'] = project_demo_url($project['demo_url'], $project['title']);
+        }
+        unset($project);
+        json_response(['success' => true, 'projects' => $projects]);
     }
 
     // 4. Public Approved Projects Catalog
@@ -188,7 +199,12 @@ if ($method === 'GET') {
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
-    json_response(['success' => true, 'projects' => $stmt->fetchAll()]);
+    $projects = $stmt->fetchAll();
+    foreach ($projects as &$project) {
+        $project['demo_url'] = project_demo_url($project['demo_url'], $project['title']);
+    }
+    unset($project);
+    json_response(['success' => true, 'projects' => $projects]);
 }
 
 // -------------------------------------------------------------
