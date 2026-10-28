@@ -24,7 +24,7 @@ try {
     }
 
     $pdo = new PDO($dsn, $username, $password, $options);
-} catch (PDOException | RuntimeException $e) {
+} catch (Exception $e) {
     // Detect if this is an API request — return JSON if so
     $isApiContext = (strpos($_SERVER['SCRIPT_FILENAME'] ?? '', DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR) !== false)
                  || (strpos($_SERVER['REQUEST_URI'] ?? '', '/api/') !== false);
