@@ -129,6 +129,14 @@ Open your web browser and navigate to:
 http://localhost/projectsphere/
 ```
 
+### Hosting Database Configuration
+For the configured InfinityFree database, `backend/core/db.php` uses:
+- **Host:** `sql207.infinityfree.com`
+- **Database:** `if0_43297350_projectsphere`
+- **Username:** `if0_43297350`
+
+Set the database password as the `PROJECTSPHERE_DB_PASSWORD` environment variable in the hosting environment. Do not put the password in source control. The application will report a configuration error if this variable is not set.
+
 ### Step 5: Configure Password Reset Emails (Gmail)
 Password reset uses PHP's `mail()` function and XAMPP Sendmail. To enable it:
 1. In `C:\xampp\sendmail\sendmail.ini`, set `smtp_server=smtp.gmail.com`, `smtp_port=587`, and `smtp_ssl=auto`.
